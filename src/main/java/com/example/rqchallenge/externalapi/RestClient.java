@@ -26,7 +26,7 @@ public class RestClient {
 	
 	@Retryable(value = {HttpClientErrorException.TooManyRequests.class},
             maxAttempts = 10,
-            backoff = @Backoff(delay = 2000L, multiplier = 1.5D, maxDelay = 15000L))
+            backoff = @Backoff(delay = 10000L, multiplier = 1.5D, maxDelay = 110000L))
 	public <T> ResponseEntity<T> execute(String url, HttpMethod httpMethod, HttpEntity<?> httpEntity, Class<T> responseClass) {
 		try {
 			return restTemplate.exchange(url, httpMethod, httpEntity, responseClass);
