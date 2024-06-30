@@ -50,6 +50,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 				throw new InvalidRequestException(MessageConstants.INVALID_INPUT_PARAMETER_VALIDATION_MESSAGE);
 			}
 			
+			// Get list of all employees and then filter the results because the
+			// external endpoint doesn't have a search function of its own
 			List<EmployeeData> emplDataList = emplAPIClient.getAllEmployees();
 			
 			if (emplDataList == null) {
@@ -58,6 +60,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 			
 			return emplDataList.
 					stream().
+					// filter employees matching the name
 					filter(emplData -> emplData.getName() != null && emplData.getName().contains(searchString)).
 					map(emplData -> EmployeeDataMapper.mapToEmployeeDto(emplData)).
 					collect(Collectors.toList());
@@ -86,6 +89,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	public Integer getHighestSalaryOfEmployees() {
 		try {
+			// Need to get list of all employees and then filter the results because the
+			// external endpoint doesn't have a query function with specific criteria
 			List<EmployeeData> emplDataList = emplAPIClient.getAllEmployees();
 			
 			if (emplDataList == null) {
@@ -106,6 +111,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	public List<String> getTopTenHighestEarningEmployeeNames() {
 		try {
+			// Need to get list of all employees and then filter the results
 			List<EmployeeData> emplDataList = emplAPIClient.getAllEmployees();
 			
 			if (emplDataList == null) {
@@ -114,6 +120,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 			
 			return emplDataList.
 					stream().
+					// sort by salary DESC
 					sorted((ed1, ed2) -> ed2.getSalary() - ed1.getSalary()).
 					limit(10).
 					map(emplData -> emplData.getName()).
@@ -142,6 +149,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		}
 	}
 	
+	// Perform various validations on data passed as creation input
 	private void validateEmpCreationInput(Map<String, Object> employeeInput) throws InvalidRequestException {
 		if (employeeInput == null || employeeInput.isEmpty()) {
 			throw new InvalidRequestException(MessageConstants.INVALID_INPUT_PARAMETER_VALIDATION_MESSAGE);
@@ -170,13 +178,16 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 	
 	@Override
+	// Delete the employee by Id and return the name of the employee
 	public String deleteEmployeeById(String id) {
 		try {
+			// First check whether the said employee exists
 			EmployeeData emplData = emplAPIClient.getEmployeeById(id);
 			if (emplData == null) {
 				throw new ResourceNotFoundException(String.format(MessageConstants.EMP_NOT_FOUND_ERROR_MESSAGE, id));
 			}
 			
+			// Now delete the employee
 			String respMsg = emplAPIClient.deleteEmployeeById(id);
 			if (respMsg == null) {
 				throw new OperationFailedException(MessageConstants.DELETE_EMPLOYEE_FAILED_ERROR_MESSAGE);
