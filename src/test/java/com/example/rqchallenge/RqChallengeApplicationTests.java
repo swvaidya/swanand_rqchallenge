@@ -123,6 +123,7 @@ class RqChallengeApplicationTests {
                 ()-> restTemplate.getForEntity(uri, String.class));
         Assertions.assertTrue(ex.getMessage().contains(String.format(MessageConstants.EMP_NOT_FOUND_ERROR_MESSAGE, id)));
     }
+    
 
     @Test
     @DisplayName("highest salary of employee among all test")

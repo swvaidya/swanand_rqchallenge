@@ -24,9 +24,9 @@ import lombok.extern.slf4j.Slf4j;
 public class RestClient {
 	private final RestTemplate restTemplate;
 	
-	@Retryable(value = {HttpClientErrorException.TooManyRequests.class},
+	@Retryable(retryFor = HttpClientErrorException.TooManyRequests.class,
             maxAttempts = 10,
-            backoff = @Backoff(delay = 10000L, multiplier = 1.5D, maxDelay = 110000L))
+            backoff = @Backoff(delay = 10000, multiplier = 1.5, maxDelay = 60000, random = true))
 	public <T> ResponseEntity<T> execute(String url, HttpMethod httpMethod, HttpEntity<?> httpEntity, Class<T> responseClass) {
 		try {
 			return restTemplate.exchange(url, httpMethod, httpEntity, responseClass);

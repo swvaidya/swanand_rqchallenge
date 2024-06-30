@@ -23,7 +23,7 @@ public class EmployeeAPIClient {
 	private final RestClient restClient;
 
 	public List<EmployeeData> getAllEmployees() {
-		String url = EmployeeAPIConstants.BASE_API_URL + EmployeeAPIConstants.GET_ALL_EMPLOYEES_URL;
+		String url = EmployeeAPIConstants.EXTERNAL_API_URL + EmployeeAPIConstants.EXTERNAL_API_GET_ALL_EMPLOYEES;
 		ResponseEntity<EmployeeListResponse> responseEntity = restClient.execute(
 				url, HttpMethod.GET,
 				RestClient.getHttpEntity(), EmployeeListResponse.class);
@@ -42,7 +42,7 @@ public class EmployeeAPIClient {
 	}
 
 	public EmployeeData getEmployeeById(String id) {
-		String url = EmployeeAPIConstants.BASE_API_URL + String.format(EmployeeAPIConstants.GET_EMPLOYEE_BY_ID_URL, id); 
+		String url = EmployeeAPIConstants.EXTERNAL_API_URL + String.format(EmployeeAPIConstants.EXTERNAL_API_GET_EMPLOYEE_BY_ID, id); 
 		ResponseEntity<EmployeeResponse> responseEntity = restClient.execute(url, HttpMethod.GET,
 				RestClient.getHttpEntity(), EmployeeResponse.class);
 		if (!HttpStatus.OK.equals(responseEntity.getStatusCode())) {
@@ -60,7 +60,7 @@ public class EmployeeAPIClient {
 	}
 
 	public EmployeeData createEmployee(Map<String, Object> employeeInput) {
-		String url = EmployeeAPIConstants.BASE_API_URL + EmployeeAPIConstants.CREATE_EMPLOYEE_URL;
+		String url = EmployeeAPIConstants.EXTERNAL_API_URL + EmployeeAPIConstants.EXTERNAL_API_CREATE_EMPLOYEE;
 		ResponseEntity<EmployeeResponse> responseEntity = restClient.execute(url,
 				HttpMethod.POST, RestClient.getHttpEntity(employeeInput), EmployeeResponse.class);
 		if (!HttpStatus.OK.equals(responseEntity.getStatusCode())) {
@@ -76,7 +76,7 @@ public class EmployeeAPIClient {
 	}
 
 	public String deleteEmployeeById(String id) {
-		String url = EmployeeAPIConstants.BASE_API_URL + String.format(EmployeeAPIConstants.DELETE_EMPLOYEE_URL, id);
+		String url = EmployeeAPIConstants.EXTERNAL_API_URL + String.format(EmployeeAPIConstants.EXTERNAL_API_DELETE_EMPLOYEE, id);
 		ResponseEntity<GenericResponse> responseEntity = restClient.execute(url,
 				HttpMethod.DELETE, RestClient.getHttpEntity(), GenericResponse.class);
 		if (!HttpStatus.OK.equals(responseEntity.getStatusCode())) {
